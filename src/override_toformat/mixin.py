@@ -9,11 +9,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, ClassVar
 
 # THIRDPARTY
-from mypy_extensions import mypyc_attr, trait
+from mypy_extensions import mypyc_attr
 
 if TYPE_CHECKING:
     # LOCAL
-    from override_toformat.overload import FormatOverloader
+    from override_toformat.overload import ToFormatOverloader
 
 
 __all__: list[str] = []
@@ -25,18 +25,17 @@ __all__: list[str] = []
 
 
 @mypyc_attr(allow_interpreted_subclasses=True)
-@trait
-class FormatOverloadMixin:
+class ToFormatOverloadMixin:
     """Mixin for adding |array_function|_ to a class.
 
     Attributes
     ----------
-    FMT_OVERLOADS : |FormatOverloader|
-        A class-attribute of an instance of |FormatOverloader|.
+    FMT_OVERLOADS : |ToFormatOverloader|
+        A class-attribute of an instance of |ToFormatOverloader|.
     """
 
-    FMT_OVERLOADS: ClassVar[FormatOverloader]
-    """A class-attribute of an instance of |FormatOverloader|."""
+    FMT_OVERLOADS: ClassVar[ToFormatOverloader]
+    """A class-attribute of an instance of |ToFormatOverloader|."""
 
     def to_format(self, format: type, /, *args: Any, **kwargs: Any) -> Any:
         """Transform width to specified format.
@@ -60,5 +59,4 @@ class FormatOverloadMixin:
         ValueError
             If format is not one of the recognized types.
         """
-        # dispatch on format, then on self-type. Call the resulting implementation.
         return self.FMT_OVERLOADS(format)(self)(self, format, *args, **kwargs)

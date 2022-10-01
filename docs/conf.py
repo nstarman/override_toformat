@@ -79,7 +79,7 @@ rst_epilog = """
 .. |Contravariant| replace:: :class:`~override_toformat.constraints.Contravariant`
 .. |Between| replace:: :class:`~override_toformat.constraints.Between`
 
-.. |FormatOverloader| replace:: :class:`~override_toformat.overload.FormatOverloader`
+.. |ToFormatOverloader| replace:: :class:`~override_toformat.overload.ToFormatOverloader`
 
 
 .. |ufunc| replace:: :class:`~numpy.ufunc`

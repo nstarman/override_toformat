@@ -26,7 +26,7 @@ Self = TypeVar("Self", bound="RegisterManyImplementsDecorator")
 
 @dataclass(frozen=True)
 class RegisterManyImplementsDecorator:
-    """Class for registering `~override_toformat.FormatOverloader.assists` funcs.
+    """Class for registering `~override_toformat.ToFormatOverloader.assists` funcs.
 
     Parameters
     ----------

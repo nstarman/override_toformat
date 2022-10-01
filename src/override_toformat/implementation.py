@@ -8,12 +8,12 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 # LOCAL
-from override_toformat.dispatch import Dispatcher, DispatchWrapper
 from override_toformat.constraints import Covariant, TypeConstraint  # noqa: TC002
+from override_toformat.dispatch import Dispatcher
 
 if TYPE_CHECKING:
     # LOCAL
-    from override_toformat.overload import FormatOverloader
+    from override_toformat.overload import ToFormatOverloader
 
 __all__: list[str] = []
 
@@ -43,7 +43,9 @@ class Implements:
         if not self.from_constraint.validate_type(from_obj.__class__):
             raise ValueError(f"object {from_obj!r} is not compatible with from_constraint {self.from_constraint}")
         elif not self.to_constraint.validate_type(to_format):
-            raise ValueError(f"format {to_format.__qualname__!r} is not compatible with to_constraint {self.to_constraint}")
+            raise ValueError(
+                f"format {to_format.__qualname__!r} is not compatible with to_constraint {self.to_constraint}"
+            )
 
         return self.converter(to_format, from_obj, *args, **kwargs)
 
@@ -58,7 +60,7 @@ class RegisterImplementsDecorator:
         *,
         from_format: type,
         to_format: type,
-        overloader: FormatOverloader,
+        overloader: ToFormatOverloader,
         from_constraint: type | TypeConstraint | None,
         to_constraint: type | TypeConstraint | None,
     ) -> None:
@@ -76,12 +78,14 @@ class RegisterImplementsDecorator:
         )
         self.__post_init__(overloader)
 
-    def __post_init__(self, overloader: FormatOverloader) -> None:
+    def __post_init__(self, overloader: ToFormatOverloader) -> None:
         # Make single-dispatcher for format
         if not overloader.__contains__(self.to_format):
-            overloader._reg[self.to_format] = dispatcher = Dispatcher()
+            # overloader._reg[self.to_format] = dispatcher = Dispatcher()
+            dispatcher = Dispatcher()
+            overloader._dispatcher.register(self.to_format, dispatcher)
         else:
-            dispatcher = overloader._reg[self.to_format]
+            dispatcher = overloader._dispatcher.registry[self.to_format]()
 
         self.dispatcher: Dispatcher
         object.__setattr__(self, "dispatcher", dispatcher)
@@ -97,5 +101,5 @@ class RegisterImplementsDecorator:
             to_constraint=self.to_constraint,
         )
         # Register the function
-        self.dispatcher._dispatcher.register(self.from_format, DispatchWrapper(implementation))
+        self.dispatcher.register(self.from_format, implementation)
         return converter

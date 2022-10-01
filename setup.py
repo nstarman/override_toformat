@@ -70,8 +70,7 @@ else:
     print("BUILDING `override_toformat` WITH MYPYC")
 
     blocklist = [  # TODO!
-        "override_toformat/wrapper/dispatch.py",  # https://github.com/python/mypy/issues/13613
-        "override_toformat/utils.py",  # https://github.com/mypyc/mypyc/issues/909
+        "override_toformat/dispatch.py",  # https://github.com/python/mypy/issues/13613
     ]
     discovered: list[Path] = []
     discovered.extend(find_python_files(SRC / "override_toformat"))

@@ -87,7 +87,7 @@
 
 [tool.cibuildwheel.environment]
   CIBW_BUILD_VERBOSITY = "1"
-  NPOVERLOAD_USE_MYPYC = "1"
+  OVERRIDETOFORMAT_USE_MYPYC = "1"
   MYPYC_OPT_LEVEL = "3"
   MYPYC_DEBUG_LEVEL = "0"
   # The dependencies required to build wheels with mypyc aren't specified in
@@ -102,7 +102,7 @@
 
 [tool.cibuildwheel.linux.environment]
   CIBW_BUILD_VERBOSITY = "1"
-  NPOVERLOAD_USE_MYPYC = "1"
+  OVERRIDETOFORMAT_USE_MYPYC = "1"
   MYPYC_OPT_LEVEL = "3"
   MYPYC_DEBUG_LEVEL = "0"
   PIP_NO_BUILD_ISOLATION = "no"
