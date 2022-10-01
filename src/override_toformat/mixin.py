@@ -60,21 +60,5 @@ class FormatOverloadMixin:
         ValueError
             If format is not one of the recognized types.
         """
-        # Check if can be dispatched.
-        # we work up the MRO if it's a type.
-        if self.FMT_OVERLOADS.__contains__(format):  # type
-            key = format
-        else:
-            for kls in format.mro():
-                if self.FMT_OVERLOADS.__contains__(kls):
-                    key = kls
-                    break
-            else:
-                raise ValueError(f"format {format} is not known -- {self.FMT_OVERLOADS.keys()}")
-
-        # get Assists/Implements from single-dispatch on type of self.
-        fmtwrap = self.FMT_OVERLOADS[key](self)
-
-        print(fmtwrap)
-
-        return fmtwrap(self, format, *args, **kwargs)
+        # dispatch on format, then on self-type. Call the resulting implementation.
+        return self.FMT_OVERLOADS(format)(self)(self, format, *args, **kwargs)

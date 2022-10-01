@@ -5,11 +5,11 @@ from __future__ import annotations
 
 # STDLIB
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 # LOCAL
 from override_toformat.dispatch import Dispatcher, DispatchWrapper
-from override_toformat.constraints import TypeConstraint, Covariant  # noqa: TC002
+from override_toformat.constraints import Covariant, TypeConstraint  # noqa: TC002
 
 if TYPE_CHECKING:
     # LOCAL
@@ -21,7 +21,6 @@ __all__: list[str] = []
 ##############################################################################
 # TYPING
 
-FT = TypeVar("FT", "Implements", "Assists")
 C = TypeVar("C", bound="Callable[..., Any]")
 
 
@@ -29,90 +28,74 @@ C = TypeVar("C", bound="Callable[..., Any]")
 # CODE
 ##############################################################################
 
-# @dataclass(frozen=True)  # TODO: when https://github.com/python/mypy/issues/13304 fixed
-class RegisterOverrideDecoratorBase(Generic[FT]):
-    OverrideCls: ClassVar[type]
 
-    # TODO: rm when https://github.com/python/mypy/issues/13304 fixed
+@dataclass(frozen=True)
+class Implements:
+    converter: Callable[..., Any]
+    from_format: type
+    to_format: type
+    from_constraint: TypeConstraint
+    to_constraint: TypeConstraint
+
+    def __call__(
+        self, from_obj: object, to_format: type, /, *args: Any, **kwargs: Any
+    ) -> Any:  # TODO: parametrize return type?
+        if not self.from_constraint.validate_type(from_obj.__class__):
+            raise ValueError(f"object {from_obj!r} is not compatible with from_constraint {self.from_constraint}")
+        elif not self.to_constraint.validate_type(to_format):
+            raise ValueError(f"format {to_format.__qualname__!r} is not compatible with to_constraint {self.to_constraint}")
+
+        return self.converter(to_format, from_obj, *args, **kwargs)
+
+    @property
+    def formats(self) -> tuple[type, type]:
+        return (self.from_format, self.to_format)
+
+
+class RegisterImplementsDecorator:
     def __init__(
-        self, *, dispatch_on: type, format: type, overloader: FormatOverloader, constraint: type | TypeConstraint | None
+        self,
+        *,
+        from_format: type,
+        to_format: type,
+        overloader: FormatOverloader,
+        from_constraint: type | TypeConstraint | None,
+        to_constraint: type | TypeConstraint | None,
     ) -> None:
-        self.dispatch_on = dispatch_on
-        self.format = format
-        self.constraint = (
-            constraint
-            if isinstance(constraint, TypeConstraint)
-            else Covariant(dispatch_on if constraint is None else constraint)
+        self.from_format = from_format
+        self.to_format = to_format
+        self.from_constraint = (
+            from_constraint
+            if isinstance(from_constraint, TypeConstraint)
+            else Covariant(from_format if from_constraint is None else from_constraint)
+        )
+        self.to_constraint = (
+            to_constraint
+            if isinstance(to_constraint, TypeConstraint)
+            else Covariant(to_format if to_constraint is None else to_constraint)
         )
         self.__post_init__(overloader)
 
     def __post_init__(self, overloader: FormatOverloader) -> None:
-        # Make single-dispatcher for numpy function
-        if not overloader.__contains__(self.format):
-            overloader._reg[self.format] = dispatcher = Dispatcher[FT]()
+        # Make single-dispatcher for format
+        if not overloader.__contains__(self.to_format):
+            overloader._reg[self.to_format] = dispatcher = Dispatcher()
         else:
-            dispatcher = cast("Dispatcher[FT]", overloader._reg[self.format])
+            dispatcher = overloader._reg[self.to_format]
 
-        self.dispatcher: Dispatcher[FT]
+        self.dispatcher: Dispatcher
         object.__setattr__(self, "dispatcher", dispatcher)
 
-    def __call__(self, func: C, /) -> C:
+    def __call__(self, converter: C, /) -> C:
         """Register an format overload."""
-        # Adding a new numpy function
-        implementation = self.OverrideCls(
-            func=func, implements=self.format, dispatch_on=self.dispatch_on, constraint=self.constraint
+        # Adding a new format
+        implementation = Implements(
+            from_format=self.from_format,
+            to_format=self.to_format,
+            converter=converter,
+            from_constraint=self.from_constraint,
+            to_constraint=self.to_constraint,
         )
-
         # Register the function
-        self.dispatcher._dispatcher.register(self.dispatch_on, DispatchWrapper(implementation))
-        return func
-
-
-##############################################################################
-
-
-@dataclass(frozen=True)
-class Implements:
-    implements: type
-    func: Callable[..., Any]
-    dispatch_on: type
-    constraint: TypeConstraint
-
-    def __call__(
-        self, calling_obj: object, _: type, /, *args: Any, **kwargs: Any
-    ) -> Any:  # TODO: parametrize return type?
-        if not self.constraint.validate_type(calling_obj.__class__):
-            raise ValueError(f"object {calling_obj} is not compatible with constraint {self.constraint}")
-
-        return self.func(calling_obj, *args, **kwargs)
-
-
-# @dataclass(frozen=True)  # TODO: when https://github.com/python/mypy/issues/13304 fixed
-class RegisterImplementsDecorator(RegisterOverrideDecoratorBase[Implements]):
-
-    OverrideCls: ClassVar[type[Implements]] = Implements
-
-
-# ============================================================================
-
-
-@dataclass(frozen=True)
-class Assists:
-    implements: type
-    func: Callable[..., Any]
-    dispatch_on: type
-    constraint: TypeConstraint
-
-    def __call__(
-        self, calling_obj: object, format: type, /, *args: Any, **kwargs: Any
-    ) -> Any:  # TODO: parametrize return type?
-        print(calling_obj)
-        if not self.constraint.validate_type(calling_obj.__class__):
-            raise ValueError(f"object {calling_obj} is not compatible with constraint {self.constraint}")
-
-        return self.func(format, calling_obj, *args, **kwargs)
-
-
-# @dataclass(frozen=True)  # TODO: when https://github.com/python/mypy/issues/13304 fixed
-class RegisterAssistsDecorator(RegisterOverrideDecoratorBase[Assists]):
-    OverrideCls: ClassVar[type[Assists]] = Assists
+        self.dispatcher._dispatcher.register(self.from_format, DispatchWrapper(implementation))
+        return converter

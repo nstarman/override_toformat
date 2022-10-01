@@ -10,26 +10,20 @@
 # IMPORTS
 
 from __future__ import annotations
-from dataclasses import dataclass
 
 # STDLIB
+from dataclasses import dataclass
 from functools import singledispatch
-from typing import TYPE_CHECKING, Any, Generic, TypeVar, final
+from typing import TYPE_CHECKING, Any, final
 
 if TYPE_CHECKING:
     # STDLIB
     import functools
 
     # LOCAL
-    from override_toformat.implementation import Implements, Assists
+    from override_toformat.implementation import Implements
 
 __all__: list[str] = []
-
-
-##############################################################################
-# TYPING
-
-WT = TypeVar("WT", "Implements", "Assists")
 
 
 ##############################################################################
@@ -38,18 +32,18 @@ WT = TypeVar("WT", "Implements", "Assists")
 
 
 @final
-class Dispatcher(Generic[WT]):
+class Dispatcher:
     """`~functools.singledispatch` instance."""
 
     def __init__(self) -> None:
         @singledispatch
-        def dispatcher(obj: object, /) -> WT:
+        def dispatcher(obj: object, /) -> Implements:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[WT]
+        self._dispatcher: functools._SingleDispatchCallable[Implements]
         self._dispatcher = dispatcher
 
-    def __call__(self, obj: object, /) -> WT:
+    def __call__(self, obj: object, /) -> Implements:
         """
         Get correct wrapper for the calling object's type.
 
@@ -60,30 +54,25 @@ class Dispatcher(Generic[WT]):
 
         Returns
         -------
-        ``WT``
-            One of `override_toformat.func.Implements`,
-            `override_toformat.func.Assists`.
+        `override_toformat.func.Implements`
         """
         return self._dispatcher(obj)
 
 
 @dataclass(frozen=True)
-class DispatchWrapper(Generic[WT]):
+class DispatchWrapper:
     """
     `~functools.singledispatch` calls the dispatched functions.
     This wraps that function so the single-dispatch instead returns the function.
 
     Parameters
     ----------
-    __wrapped__ : `Implements` or `Assists` or `ImplementsUFunc` or `AssistsUFunc`
+    __wrapped__ : `Implements`
         The result of calling ``Dispatch``.
     """
 
-    __wrapped__: WT  # Dispatch wrapper
+    __wrapped__: Implements  # Dispatch wrapper
 
-    def __call__(self, *_: Any, **__: Any) -> WT:
+    def __call__(self, *_: Any, **__: Any) -> Implements:
         """Return ``__wrapped__``, ignoring input."""
         return self.__wrapped__  # `Dispatch` wrapper
-
-
-All_Dispatchers = Dispatcher[Any]  # TODO: parametrization of Dispatcher

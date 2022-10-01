@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, TypeVar
 
 # LOCAL
-from override_toformat.implementation import RegisterAssistsDecorator
+from override_toformat.implementation import RegisterImplementsDecorator  # noqa: TC002
 
 __all__: list[str] = []
 
@@ -16,7 +16,7 @@ __all__: list[str] = []
 # TYPING
 
 C = TypeVar("C", bound=Callable[..., Any])
-Self = TypeVar("Self", bound="RegisterManyAssistsDecorator")
+Self = TypeVar("Self", bound="RegisterManyImplementsDecorator")
 
 
 ##############################################################################
@@ -25,21 +25,21 @@ Self = TypeVar("Self", bound="RegisterManyAssistsDecorator")
 
 
 @dataclass(frozen=True)
-class RegisterManyAssistsDecorator:
+class RegisterManyImplementsDecorator:
     """Class for registering `~override_toformat.FormatOverloader.assists` funcs.
 
     Parameters
     ----------
-    decorators : tuple[RegisterAssistsDecorator, ...]
-        `tuple` of ``RegisterAssistsDecorator``.
+    decorators : tuple[RegisterImplementsDecorator, ...]
+        `tuple` of ``RegisterImplementsDecorator``.
 
     __wrapped__ : Callable[..., Any] | None
         The assistance function which this object wraps. ``__call__`` must be
         used before this is not `None`.
     """
 
-    decorators: tuple[RegisterAssistsDecorator, ...]
-    """`tuple` of ``RegisterAssistsDecorator``."""
+    decorators: tuple[RegisterImplementsDecorator, ...]
+    """`tuple` of ``RegisterImplementsDecorator``."""
 
     def __post_init__(self) -> None:
         self.__wrapped__: Callable[..., Any]
@@ -60,7 +60,7 @@ class RegisterManyAssistsDecorator:
 
         Returns
         -------
-        RegisterManyAssistsDecorator
+        RegisterManyImplementsDecorator
         """
         if self._is_set:
             raise ValueError
