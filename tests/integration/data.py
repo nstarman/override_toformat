@@ -1,17 +1,20 @@
+from __future__ import annotations
+
 # STDLIB
 from array import array
 from dataclasses import dataclass
 from typing import ClassVar
 
 # LOCAL
-from override_toformat import FormatOverloader, FormatOverloadMixin
+from override_toformat.mixin import ToFormatOverloadMixin
+from override_toformat.overload import ToFormatOverloader
 
 
 @dataclass
-class ClassA(FormatOverloadMixin):
+class ClassA(ToFormatOverloadMixin):
     x: array
 
-    FMT_OVERLOADS: ClassVar[FormatOverloader] = FormatOverloader()
+    FMT_OVERLOADS: ClassVar[ToFormatOverloader] = ToFormatOverloader()
 
 
 a = ClassA(array("d", [1.0, 2.0, 3.14]))
@@ -54,10 +57,10 @@ d = ClassD(array("d", [1.0, 2.0, 3.14]), array("d", [4.0, 5.0, 6.28]))
 
 
 @dataclass
-class Class1(FormatOverloadMixin):
+class Class1(ToFormatOverloadMixin):
     attr1: array
 
-    FMT_OVERLOADS: ClassVar[FormatOverloader] = FormatOverloader()
+    FMT_OVERLOADS: ClassVar[ToFormatOverloader] = ToFormatOverloader()
 
 
 o1 = Class1(array("d", [1.0, 2.0, 3.14]))

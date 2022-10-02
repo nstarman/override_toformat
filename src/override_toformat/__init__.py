@@ -1,13 +1,13 @@
 # LOCAL
 from override_toformat import constraints
-from override_toformat.mixin import FormatOverloadMixin
-from override_toformat.overload import FormatOverloader
+from override_toformat.mixin import ToFormatOverloadMixin
+from override_toformat.overload import ToFormatOverloader
 
 __all__ = [
     # overloader
-    "FormatOverloader",
+    "ToFormatOverloader",
     # mixins
-    "FormatOverloadMixin",
+    "ToFormatOverloadMixin",
     # modules
     "constraints",
 ]
