@@ -1,11 +1,11 @@
 [project]
   name = "override_toformat"
   version = "0.0.1"
-  description = "Overload NumPy Functions"
+  description = "Add easy object interchange"
   readme = "README.rst"
   requires-python = ">=3.8"
   license = {file = "LICENSE"}
-  keywords = ["numpy", "interoperability"]
+  keywords = ["interoperability"]
   authors = [
     {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"}
   ]
@@ -21,7 +21,6 @@
   ]
   dependencies = [
     "mypy_extensions>=0.4.3",
-    "numpy",
   ]
 
 [project.optional-dependencies]
@@ -155,8 +154,9 @@
     "if __name__ == .__main__.:",
     # Don't complain about abstract methods, they aren't run:
     '@(abc\.)?abstractmethod',
-    # Exclude type check blocks
+    # Exclude type check blocks and Protocol contents, they aren't run:
     "if TYPE_CHECKING:",
+    '\.\.\.',
     # Don't complain about IPython completion helper
     "def _ipython_key_completions_",
   ]

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 # STDLIB
 import os
+from typing import Any
 
 # THIRDPARTY
 import pytest
@@ -32,8 +33,23 @@ def pytest_configure(config: pytest.Config) -> None:
     PYTEST_HEADER_MODULES.pop("Pandas", None)
 
     # STDLIB
-    # from stream import __version__  # type: ignore
     from importlib.metadata import version
 
     packagename = os.path.basename(os.path.dirname(__file__))
     TESTED_VERSIONS[packagename] = version("override_toformat")
+
+
+@pytest.fixture(autouse=True)  # type: ignore
+def add_numpy(doctest_namespace: dict[str, Any]) -> None:
+    """Add NumPy to Pytest.
+
+    Parameters
+    ----------
+    doctest_namespace : namespace
+
+    """
+    # THIRDPARTY
+    import numpy
+
+    # add to namespace
+    doctest_namespace["np"] = numpy

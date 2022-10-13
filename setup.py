@@ -80,4 +80,4 @@ else:
     ext_modules = mypycify(mypyc_targets, opt_level=opt_level, verbose=True)
 
 
-setup(name="override_toformat", packages=["override_toformat"], ext_modules=ext_modules)
+setup(name="overload_numpy", package_dir={"": "src"}, ext_modules=ext_modules)
