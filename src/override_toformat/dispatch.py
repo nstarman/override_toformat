@@ -44,7 +44,7 @@ class Dispatcher:
 
     def __init__(self) -> None:
         @singledispatch
-        def dispatcher(obj: object, /) -> Implements:
+        def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Implements:
             raise NotImplementedError  # See Mixin for handling.
 
         self._dispatcher: functools._SingleDispatchCallable[Implements]
@@ -95,7 +95,7 @@ class FormatDispatcher:
 
     def __init__(self) -> None:
         @singledispatch
-        def dispatcher(obj: object, /) -> Dispatcher:
+        def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Dispatcher:
             raise NotImplementedError  # See Mixin for handling.
 
         self._dispatcher: functools._SingleDispatchCallable[Dispatcher]
