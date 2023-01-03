@@ -14,6 +14,7 @@ def letter_to_number(cls, obj):
 
 
 def test_A_to_1():
+    """Test that the format is compatible with the constraint."""
     got = a.to_format(Class1)
 
     assert isinstance(got, Class1)
@@ -21,5 +22,6 @@ def test_A_to_1():
 
 
 def test_A_to_2():
+    """Test that the format is not compatible with the constraint."""
     with pytest.raises(ValueError, match="format 'Class2' is not compatible with to_constraint"):
         a.to_format(Class2)

@@ -1,4 +1,4 @@
-"""`~functools.singledispatch`
+"""`~functools.singledispatch`.
 
 .. todo::
 
@@ -51,8 +51,7 @@ class Dispatcher:
         self._dispatcher = dispatcher
 
     def __call__(self, obj: object, /) -> Implements:
-        """
-        Get correct wrapper for the calling object's type.
+        """Get correct wrapper for the calling object's type.
 
         Parameters
         ----------
@@ -66,13 +65,23 @@ class Dispatcher:
         return self._dispatcher(obj)
 
     def register(self, cls: type, impl: Implements, /) -> None:
+        """Register a new implementation.
+
+        Parameters
+        ----------
+        cls : type, positional-only
+            Type to register.
+        impl : `override_toformat.func.Implements`, positional-only
+            Implementation to register.
+        """
         self._dispatcher.register(cls, DispatchWrapper(impl))
-        return None
+        return
 
 
 @dataclass(frozen=True)
 class DispatchWrapper(Generic[T]):
-    """
+    """Wrapper for `~functools.singledispatch`.
+
     `~functools.singledispatch` calls the dispatched functions.
     This wraps that function so the single-dispatch instead returns the function.
 
@@ -101,13 +110,16 @@ class FormatDispatcher:
         self._dispatcher: functools._SingleDispatchCallable[Dispatcher]
         self._dispatcher = dispatcher
 
-    def __call__(self, type: type, /) -> Dispatcher:
-        return self._dispatcher.dispatch(type)()
+    def __call__(self, type_: type, /) -> Dispatcher:
+        """Call the dispatcher for ``type``."""
+        return self._dispatcher.dispatch(type_)()
 
     def register(self, cls: type, dispatcher: Dispatcher, /) -> None:
+        """Register a new type with a dispatcher."""
         self._dispatcher.register(cls, DispatchWrapper(dispatcher))
-        return None
+        return
 
     @property
     def registry(self) -> MappingProxyType[type, DispatchWrapper[Dispatcher]]:
+        """Mapping of types to dispatchers."""
         return cast("MappingProxyType[type, DispatchWrapper[Dispatcher]]", self._dispatcher.registry)

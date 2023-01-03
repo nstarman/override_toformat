@@ -123,8 +123,7 @@ class TypeConstraint(metaclass=ABCMeta):
 @mypyc_attr(allow_interpreted_subclasses=True)
 @dataclass(frozen=True)
 class Invariant(TypeConstraint):
-    r"""
-    Type constraint for invariance -- the exact type.
+    r"""Type constraint for invariance -- the exact type.
 
     This is equivalent to ``arg_type is bound``.
 
@@ -157,14 +156,25 @@ class Invariant(TypeConstraint):
     bound: type
 
     def validate_type(self, arg_type: type, /) -> bool:
+        """Validate the argument type.
+
+        Parameters
+        ----------
+        arg_type : type, positional-only
+            The type of the argument that must fit the type constraint.
+
+        Returns
+        -------
+        bool
+            Whether the type is valid.
+        """
         return arg_type is self.bound
 
 
 @mypyc_attr(allow_interpreted_subclasses=True)
 @dataclass(frozen=True)
 class Covariant(TypeConstraint):
-    r"""
-    A covariant constraint -- permitting subclasses.
+    r"""A covariant constraint -- permitting subclasses.
 
     This is the most common constraint, equivalent to ``issubclass(arg_type,
     bound)``.
@@ -198,14 +208,25 @@ class Covariant(TypeConstraint):
     bound: type
 
     def validate_type(self, arg_type: type, /) -> bool:
+        """Validate the argument type.
+
+        Parameters
+        ----------
+        arg_type : type, positional-only
+            The type of the argument that must fit the type constraint.
+
+        Returns
+        -------
+        bool
+            Whether the type is valid.
+        """
         return issubclass(arg_type, self.bound)
 
 
 @mypyc_attr(allow_interpreted_subclasses=True)
 @dataclass(frozen=True)
 class Contravariant(TypeConstraint):
-    r"""
-    A contravariant constraint -- permitting superclasses.
+    r"""A contravariant constraint -- permitting superclasses.
 
     An uncommon constraint. See examples for why.
 
@@ -238,14 +259,25 @@ class Contravariant(TypeConstraint):
     bound: type
 
     def validate_type(self, arg_type: type, /) -> bool:
+        """Validate the argument type.
+
+        Parameters
+        ----------
+        arg_type : type, positional-only
+            The type of the argument that must fit the type constraint.
+
+        Returns
+        -------
+        bool
+            Whether the type is valid.
+        """
         return issubclass(self.bound, arg_type)
 
 
 @mypyc_attr(allow_interpreted_subclasses=True)
 @dataclass(frozen=True)
 class Between(TypeConstraint):
-    r"""
-    Type constrained between two types.
+    r"""Type constrained between two types.
 
     This combines the functionality of
     :class:`~override_toformat.constraints.Covariant` and
@@ -295,6 +327,17 @@ class Between(TypeConstraint):
     upper_bound: type
 
     def validate_type(self, arg_type: type, /) -> bool:
+        """Validate the argument type.
+
+        Parameters
+        ----------
+        arg_type : type
+            The type of the argument.
+
+        Returns
+        -------
+        bool
+        """
         return issubclass(self.lower_bound, arg_type) & issubclass(arg_type, self.upper_bound)
 
     @property

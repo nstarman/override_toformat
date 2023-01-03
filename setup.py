@@ -1,5 +1,4 @@
-##############################################################################
-# IMPORTS
+"""Setup script for ``overload_numpy``."""
 
 from __future__ import annotations
 
@@ -67,7 +66,6 @@ if not USE_MYPYC:
     ext_modules = []
 
 else:
-    print("BUILDING `override_toformat` WITH MYPYC")
 
     blocklist = [  # TODO!
         "override_toformat/dispatch.py",  # https://github.com/python/mypy/issues/13613

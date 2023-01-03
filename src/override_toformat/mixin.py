@@ -37,7 +37,7 @@ class ToFormatOverloadMixin:
     FMT_OVERLOADS: ClassVar[ToFormatOverloader]
     """A class-attribute of an instance of |ToFormatOverloader|."""
 
-    def to_format(self, format: type, /, *args: Any, **kwargs: Any) -> Any:
+    def to_format(self, format: type, /, *args: Any, **kwargs: Any) -> Any:  # noqa: A002
         """Transform width to specified format.
 
         Parameters
