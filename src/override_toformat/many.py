@@ -1,5 +1,4 @@
-##############################################################################
-# IMPORTS
+"""Class for registering `~override_toformat.ToFormatOverloader.assists` funcs."""
 
 from __future__ import annotations
 
@@ -8,7 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, TypeVar
 
 # LOCAL
-from override_toformat.implementation import RegisterImplementsDecorator  # noqa: TC002
+from override_toformat.implementation import RegisterImplementsDecorator
 
 __all__: list[str] = []
 

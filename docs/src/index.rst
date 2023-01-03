@@ -1,8 +1,8 @@
 .. _override_toformat:
 
-##################################
-Documenation (`override_toformat`)
-##################################
+###################################
+Documentation (`override_toformat`)
+###################################
 
 
 .. _override_toformat-api:

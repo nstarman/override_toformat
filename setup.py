@@ -1,5 +1,4 @@
-##############################################################################
-# IMPORTS
+"""Setup script for ``overload_numpy``."""
 
 from __future__ import annotations
 
@@ -67,7 +66,6 @@ if not USE_MYPYC:
     ext_modules = []
 
 else:
-    print("BUILDING `override_toformat` WITH MYPYC")
 
     blocklist = [  # TODO!
         "override_toformat/dispatch.py",  # https://github.com/python/mypy/issues/13613
@@ -80,4 +78,4 @@ else:
     ext_modules = mypycify(mypyc_targets, opt_level=opt_level, verbose=True)
 
 
-setup(name="override_toformat", packages=["override_toformat"], ext_modules=ext_modules)
+setup(name="overload_numpy", package_dir={"": "src"}, ext_modules=ext_modules)

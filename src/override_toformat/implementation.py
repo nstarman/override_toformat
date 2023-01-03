@@ -1,5 +1,4 @@
-##############################################################################
-# IMPORTS
+"""Implementation decorator."""
 
 from __future__ import annotations
 
@@ -8,7 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 # LOCAL
-from override_toformat.constraints import Covariant, TypeConstraint  # noqa: TC002
+from override_toformat.constraints import Covariant, TypeConstraint
 from override_toformat.dispatch import Dispatcher
 
 if TYPE_CHECKING:
@@ -31,6 +30,8 @@ C = TypeVar("C", bound="Callable[..., Any]")
 
 @dataclass(frozen=True)
 class Implements:
+    """A class that implements an overload."""
+
     converter: Callable[..., Any]
     from_format: type
     to_format: type
@@ -40,21 +41,47 @@ class Implements:
     def __call__(
         self, from_obj: object, to_format: type, /, *args: Any, **kwargs: Any
     ) -> Any:  # TODO: parametrize return type?
+        """Call the converter.
+
+        Parameters
+        ----------
+        from_obj : object, positional-only
+            object to convert from.
+        to_format : type, positional-only
+            format to convert to.
+        *args : Any
+            positional arguments to pass to the converter.
+        **kwargs : Any
+            keyword arguments to pass to the converter.
+
+        Returns
+        -------
+        Any
+            The converted object.
+
+        Raises
+        ------
+        ValueError
+            If the object or format is not compatible with the constraints.
+        """
         if not self.from_constraint.validate_type(from_obj.__class__):
-            raise ValueError(f"object {from_obj!r} is not compatible with from_constraint {self.from_constraint}")
+            msg = f"object {from_obj!r} is not compatible with from_constraint {self.from_constraint}"
+            raise ValueError(msg)
         elif not self.to_constraint.validate_type(to_format):
-            raise ValueError(
-                f"format {to_format.__qualname__!r} is not compatible with to_constraint {self.to_constraint}"
-            )
+            msg = f"format {to_format.__qualname__!r} is not compatible with to_constraint {self.to_constraint}"
+            raise ValueError(msg)
 
         return self.converter(to_format, from_obj, *args, **kwargs)
 
     @property
     def formats(self) -> tuple[type, type]:
+        """Return the from-to format tuple."""
         return (self.from_format, self.to_format)
 
 
 class RegisterImplementsDecorator:
+    """Decorator to register an ``implements`` overload."""
+
     def __init__(
         self,
         *,
@@ -81,7 +108,6 @@ class RegisterImplementsDecorator:
     def __post_init__(self, overloader: ToFormatOverloader) -> None:
         # Make single-dispatcher for format
         if not overloader.__contains__(self.to_format):
-            # overloader._reg[self.to_format] = dispatcher = Dispatcher()
             dispatcher = Dispatcher()
             overloader._dispatcher.register(self.to_format, dispatcher)
         else:

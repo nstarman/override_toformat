@@ -1,16 +1,15 @@
 """Configure Test Suite.
 
 This file is used to configure the behavior of pytest when using the Astropy
-test infrastructure. It needs to live inside the package in order for it to
-get picked up when running the tests inside an interpreter using
-packagename.test
-
+test infrastructure. It needs to live inside the package in order for it to get
+picked up when running the tests inside an interpreter using packagename.test
 """
 
 from __future__ import annotations
 
 # STDLIB
 import os
+from typing import Any
 
 # THIRDPARTY
 import pytest
@@ -22,7 +21,8 @@ def pytest_configure(config: pytest.Config) -> None:
 
     Parameters
     ----------
-    config : pytest configuration
+    config : `pytest.Config`
+        pytest configuration.
     """
     config.option.astropy_header = True
 
@@ -32,8 +32,23 @@ def pytest_configure(config: pytest.Config) -> None:
     PYTEST_HEADER_MODULES.pop("Pandas", None)
 
     # STDLIB
-    # from stream import __version__  # type: ignore
     from importlib.metadata import version
 
     packagename = os.path.basename(os.path.dirname(__file__))
     TESTED_VERSIONS[packagename] = version("override_toformat")
+
+
+@pytest.fixture(autouse=True)  # type: ignore[misc]
+def add_numpy(doctest_namespace: dict[str, Any]) -> None:
+    """Add NumPy to Pytest.
+
+    Parameters
+    ----------
+    doctest_namespace : dict[str, Any]
+        Namespace for doctests.
+    """
+    # THIRDPARTY
+    import numpy as np
+
+    # add to namespace
+    doctest_namespace["np"] = np

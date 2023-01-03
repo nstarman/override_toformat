@@ -1,3 +1,5 @@
+"""Add support for object conversion to registered formats."""
+
 # LOCAL
 from override_toformat import constraints
 from override_toformat.mixin import ToFormatOverloadMixin
