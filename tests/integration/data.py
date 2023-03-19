@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-# STDLIB
 from array import array
 from dataclasses import dataclass
 from typing import ClassVar
 
-# LOCAL
 from override_toformat.mixin import ToFormatOverloadMixin
 from override_toformat.overload import ToFormatOverloader
 

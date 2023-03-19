@@ -5,14 +5,11 @@ r"""Mixins for adding |to_format| methods."""
 
 from __future__ import annotations
 
-# STDLIB
 from typing import TYPE_CHECKING, Any, ClassVar
 
-# THIRDPARTY
 from mypy_extensions import mypyc_attr
 
 if TYPE_CHECKING:
-    # LOCAL
     from override_toformat.overload import ToFormatOverloader
 
 

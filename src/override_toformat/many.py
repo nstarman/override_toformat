@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-# STDLIB
 from dataclasses import dataclass
 from typing import Any, Callable, TypeVar
 
-# LOCAL
-from override_toformat.implementation import RegisterImplementsDecorator
+from override_toformat.implementation import RegisterImplementsDecorator  # noqa: TCH001
 
 __all__: list[str] = []
 

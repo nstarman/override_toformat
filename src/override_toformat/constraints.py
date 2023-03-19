@@ -14,11 +14,9 @@ flexibility to set constrains on a per-overloaded function basis.
 
 from __future__ import annotations
 
-# STDLIB
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
 
-# THIRDPARTY
 from mypy_extensions import mypyc_attr
 
 __all__ = ["TypeConstraint", "Invariant", "Covariant", "Contravariant", "Between"]

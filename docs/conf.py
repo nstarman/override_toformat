@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-# STDLIB
 import datetime
 import pathlib
 import sys
 from importlib import import_module
 from importlib.metadata import version as get_version
 
-# THIRDPARTY
 import tomli
 
 

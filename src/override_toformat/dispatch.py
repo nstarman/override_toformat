@@ -11,17 +11,14 @@
 
 from __future__ import annotations
 
-# STDLIB
 from dataclasses import dataclass
 from functools import singledispatch
 from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast, final
 
 if TYPE_CHECKING:
-    # STDLIB
     import functools
     from types import MappingProxyType
 
-    # LOCAL
     from override_toformat.implementation import Implements
 
 __all__: list[str] = []
@@ -47,7 +44,7 @@ class Dispatcher:
         def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Implements:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[Implements]
+        self._dispatcher: functools._SingleDispatchCallable[Implements]  # noqa: SLF001
         self._dispatcher = dispatcher
 
     def __call__(self, obj: object, /) -> Implements:
@@ -75,7 +72,6 @@ class Dispatcher:
             Implementation to register.
         """
         self._dispatcher.register(cls, DispatchWrapper(impl))
-        return
 
 
 @dataclass(frozen=True)
@@ -107,7 +103,7 @@ class FormatDispatcher:
         def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Dispatcher:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[Dispatcher]
+        self._dispatcher: functools._SingleDispatchCallable[Dispatcher]  # noqa: SLF001
         self._dispatcher = dispatcher
 
     def __call__(self, type_: type, /) -> Dispatcher:
@@ -117,7 +113,6 @@ class FormatDispatcher:
     def register(self, cls: type, dispatcher: Dispatcher, /) -> None:
         """Register a new type with a dispatcher."""
         self._dispatcher.register(cls, DispatchWrapper(dispatcher))
-        return
 
     @property
     def registry(self) -> MappingProxyType[type, DispatchWrapper[Dispatcher]]:

@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-# STDLIB
 import os
 import sys
 from pathlib import Path
 
-# THIRDPARTY
 from mypyc.build import mypycify
 from setuptools import setup
 
@@ -66,7 +64,6 @@ if not USE_MYPYC:
     ext_modules = []
 
 else:
-
     blocklist = [  # TODO!
         "override_toformat/dispatch.py",  # https://github.com/python/mypy/issues/13613
     ]

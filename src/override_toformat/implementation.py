@@ -2,16 +2,18 @@
 
 from __future__ import annotations
 
-# STDLIB
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    TypeVar,
+)
 
-# LOCAL
 from override_toformat.constraints import Covariant, TypeConstraint
 from override_toformat.dispatch import Dispatcher
 
 if TYPE_CHECKING:
-    # LOCAL
     from override_toformat.overload import ToFormatOverloader
 
 __all__: list[str] = []
@@ -39,7 +41,12 @@ class Implements:
     to_constraint: TypeConstraint
 
     def __call__(
-        self, from_obj: object, to_format: type, /, *args: Any, **kwargs: Any
+        self,
+        from_obj: object,
+        to_format: type,
+        /,
+        *args: Any,
+        **kwargs: Any,
     ) -> Any:  # TODO: parametrize return type?
         """Call the converter.
 
@@ -109,9 +116,9 @@ class RegisterImplementsDecorator:
         # Make single-dispatcher for format
         if not overloader.__contains__(self.to_format):
             dispatcher = Dispatcher()
-            overloader._dispatcher.register(self.to_format, dispatcher)
+            overloader._dispatcher.register(self.to_format, dispatcher)  # noqa: SLF001
         else:
-            dispatcher = overloader._dispatcher.registry[self.to_format]()
+            dispatcher = overloader._dispatcher.registry[self.to_format]()  # noqa: SLF001
 
         self.dispatcher: Dispatcher
         object.__setattr__(self, "dispatcher", dispatcher)

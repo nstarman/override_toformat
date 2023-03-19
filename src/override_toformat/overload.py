@@ -2,24 +2,15 @@
 
 from __future__ import annotations
 
-# STDLIB
-from typing import (
-    TYPE_CHECKING,
-    ItemsView,
-    Iterator,
-    KeysView,
-    Mapping,
-    ValuesView,
-    overload,
-)
+from typing import TYPE_CHECKING, Mapping, overload
 
-# LOCAL
 from override_toformat.dispatch import Dispatcher, FormatDispatcher
 from override_toformat.implementation import RegisterImplementsDecorator
 from override_toformat.many import RegisterManyImplementsDecorator
 
 if TYPE_CHECKING:
-    # LOCAL
+    from collections.abc import ItemsView, Iterator, KeysView, ValuesView
+
     from override_toformat.constraints import TypeConstraint
 
 
@@ -131,5 +122,5 @@ class ToFormatOverloader(Mapping[type, Dispatcher]):
                         )
                     )
                     for fmt in to_format
-                )
+                ),
             )
