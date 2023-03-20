@@ -1,18 +1,16 @@
-##############################################################################
-# IMPORTS
+"""The ``to_format`` overloader."""
 
 from __future__ import annotations
 
-# STDLIB
-from typing import TYPE_CHECKING, Iterator, KeysView, Mapping, ValuesView, overload
+from typing import TYPE_CHECKING, Mapping, overload
 
-# LOCAL
 from override_toformat.dispatch import Dispatcher, FormatDispatcher
 from override_toformat.implementation import RegisterImplementsDecorator
 from override_toformat.many import RegisterManyImplementsDecorator
 
 if TYPE_CHECKING:
-    # LOCAL
+    from collections.abc import ItemsView, Iterator, KeysView, ValuesView
+
     from override_toformat.constraints import TypeConstraint
 
 
@@ -28,8 +26,6 @@ __all__: list[str] = []
 class ToFormatOverloader(Mapping[type, Dispatcher]):
     """Overload for ``to_format``."""
 
-    # self._reg: dict[str, "All_Dispatchers"] = field(default_factory={})
-
     def __init__(self) -> None:
         # Initialize by calling `__post_init__`, which is included for
         # `dataclasses.dataclass` subclasses.
@@ -40,6 +36,7 @@ class ToFormatOverloader(Mapping[type, Dispatcher]):
         object.__setattr__(self, "_dispatcher", FormatDispatcher())
 
     def __call__(self, key: type, /) -> Dispatcher:
+        """Return the dispatcher for ``key``."""
         return self._dispatcher(key)
 
     # ===============================================================
@@ -58,10 +55,16 @@ class ToFormatOverloader(Mapping[type, Dispatcher]):
         return len(self._dispatcher.registry)
 
     def keys(self) -> KeysView[type]:
+        """Return a view of the keys."""
         return self._dispatcher.registry.keys()
 
     def values(self) -> ValuesView[Dispatcher]:
+        """Return a view of a copy of the values."""
         return {k: v() for k, v in self._dispatcher.registry.items()}.values()
+
+    def items(self) -> ItemsView[type, Dispatcher]:
+        """Return a view of a copy of the items."""
+        return {k: v() for k, v in self._dispatcher.registry.items()}.items()
 
     # ===============================================================
 
@@ -119,5 +122,5 @@ class ToFormatOverloader(Mapping[type, Dispatcher]):
                         )
                     )
                     for fmt in to_format
-                )
+                ),
             )

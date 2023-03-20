@@ -5,14 +5,11 @@ r"""Mixins for adding |to_format| methods."""
 
 from __future__ import annotations
 
-# STDLIB
 from typing import TYPE_CHECKING, Any, ClassVar
 
-# THIRDPARTY
 from mypy_extensions import mypyc_attr
 
 if TYPE_CHECKING:
-    # LOCAL
     from override_toformat.overload import ToFormatOverloader
 
 
@@ -37,7 +34,7 @@ class ToFormatOverloadMixin:
     FMT_OVERLOADS: ClassVar[ToFormatOverloader]
     """A class-attribute of an instance of |ToFormatOverloader|."""
 
-    def to_format(self, format: type, /, *args: Any, **kwargs: Any) -> Any:
+    def to_format(self, format: type, /, *args: Any, **kwargs: Any) -> Any:  # noqa: A002
         """Transform width to specified format.
 
         Parameters

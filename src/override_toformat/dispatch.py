@@ -1,4 +1,4 @@
-"""`~functools.singledispatch`
+"""`~functools.singledispatch`.
 
 .. todo::
 
@@ -11,17 +11,14 @@
 
 from __future__ import annotations
 
-# STDLIB
 from dataclasses import dataclass
 from functools import singledispatch
 from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast, final
 
 if TYPE_CHECKING:
-    # STDLIB
     import functools
     from types import MappingProxyType
 
-    # LOCAL
     from override_toformat.implementation import Implements
 
 __all__: list[str] = []
@@ -44,15 +41,14 @@ class Dispatcher:
 
     def __init__(self) -> None:
         @singledispatch
-        def dispatcher(obj: object, /) -> Implements:
+        def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Implements:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[Implements]
+        self._dispatcher: functools._SingleDispatchCallable[Implements]  # noqa: SLF001
         self._dispatcher = dispatcher
 
     def __call__(self, obj: object, /) -> Implements:
-        """
-        Get correct wrapper for the calling object's type.
+        """Get correct wrapper for the calling object's type.
 
         Parameters
         ----------
@@ -66,13 +62,22 @@ class Dispatcher:
         return self._dispatcher(obj)
 
     def register(self, cls: type, impl: Implements, /) -> None:
+        """Register a new implementation.
+
+        Parameters
+        ----------
+        cls : type, positional-only
+            Type to register.
+        impl : `override_toformat.func.Implements`, positional-only
+            Implementation to register.
+        """
         self._dispatcher.register(cls, DispatchWrapper(impl))
-        return None
 
 
 @dataclass(frozen=True)
 class DispatchWrapper(Generic[T]):
-    """
+    """Wrapper for `~functools.singledispatch`.
+
     `~functools.singledispatch` calls the dispatched functions.
     This wraps that function so the single-dispatch instead returns the function.
 
@@ -95,19 +100,21 @@ class FormatDispatcher:
 
     def __init__(self) -> None:
         @singledispatch
-        def dispatcher(obj: object, /) -> Dispatcher:
+        def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Dispatcher:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[Dispatcher]
+        self._dispatcher: functools._SingleDispatchCallable[Dispatcher]  # noqa: SLF001
         self._dispatcher = dispatcher
 
-    def __call__(self, type: type, /) -> Dispatcher:
-        return self._dispatcher.dispatch(type)()
+    def __call__(self, type_: type, /) -> Dispatcher:
+        """Call the dispatcher for ``type``."""
+        return self._dispatcher.dispatch(type_)()
 
     def register(self, cls: type, dispatcher: Dispatcher, /) -> None:
+        """Register a new type with a dispatcher."""
         self._dispatcher.register(cls, DispatchWrapper(dispatcher))
-        return None
 
     @property
     def registry(self) -> MappingProxyType[type, DispatchWrapper[Dispatcher]]:
+        """Mapping of types to dispatchers."""
         return cast("MappingProxyType[type, DispatchWrapper[Dispatcher]]", self._dispatcher.registry)

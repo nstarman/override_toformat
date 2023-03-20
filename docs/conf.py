@@ -1,15 +1,13 @@
-# Load all of the global Astropy configuration
+"""Documentation configuration."""
 
 from __future__ import annotations
 
-# STDLIB
 import datetime
 import pathlib
 import sys
 from importlib import import_module
 from importlib.metadata import version as get_version
 
-# THIRDPARTY
 import tomli
 
 
@@ -21,7 +19,6 @@ def get_authors() -> set[str]:
     set[str]
         The authors.
     """
-
     authors: set[str] = set()
     cfg = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 
@@ -48,7 +45,6 @@ templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
 source_suffix = ".rst"
 
 # Sphinx extensions
@@ -87,7 +83,7 @@ rst_epilog = """
 .. _array_function: https://numpy.org/doc/stable/reference/arrays.classes.html#numpy.class.__array_function__
 .. |array_ufunc| replace:: ``__array_ufunc__``
 .. _array_ufunc: https://numpy.org/doc/stable/reference/arrays.classes.html#numpy.class.__array_ufunc__
-"""  # noqa: E501
+"""
 
 # intersphinx
 intersphinx_mapping = {
@@ -151,7 +147,7 @@ numpydoc_xref_aliases = {
 # This does not *have* to match the package name, but typically does
 project = "override_toformat"
 author = ", ".join(get_authors())
-copyright = f"{datetime.datetime.now().year}, {author}"
+copyright = f"{datetime.datetime.now(tz=None).year}, {author}"  # noqa: A001, DTZ005
 
 import_module(project)
 package = sys.modules[project]
@@ -166,18 +162,10 @@ release = get_version("override_toformat")
 
 html_theme = "furo"
 
-# html_logo = '_static/<X>.png'
 
-# html_theme_options = {
-#     "logo_link": "index",
 #     "icon_links": [
-#         {
-#             "name": "GitHub",
-#             "url": "",
-#             "icon": "fab fa-github-square",
 #         },
 #     ],
-# }
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {"**": ["search-field.html", "sidebar-nav-bs.html"]}
@@ -185,16 +173,13 @@ html_sidebars = {"**": ["search-field.html", "sidebar-nav-bs.html"]}
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = ''
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = str(docs_root / '_static' / 'X.ico')
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-# html_last_updated_fmt = ''
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
