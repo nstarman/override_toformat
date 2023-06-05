@@ -40,7 +40,7 @@ repos:
       - id: codespell
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.0.263"
+    rev: "v0.0.270"
     hooks:
       - id: ruff
         args:
@@ -55,7 +55,7 @@ repos:
         additional_dependencies: [toml]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.2.0'
+    rev: 'v1.3.0'
     hooks:
       - id: mypy
         args:
