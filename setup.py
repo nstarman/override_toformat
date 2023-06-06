@@ -64,7 +64,7 @@ if not USE_MYPYC:
     ext_modules = []
 
 else:
-    blocklist = [  # TODO!
+    blocklist = [  # TODO: build everything.
         "override_toformat/dispatch.py",  # https://github.com/python/mypy/issues/13613
     ]
     discovered: list[Path] = []
