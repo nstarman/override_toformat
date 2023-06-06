@@ -89,7 +89,7 @@ class Implements:
 class RegisterImplementsDecorator:
     """Decorator to register an ``implements`` overload."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         *,
         from_format: type,

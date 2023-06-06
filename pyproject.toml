@@ -187,6 +187,9 @@
     "FBT003",
     "PD",
     "RET505", "RET506", "RET507",
+    "TD002",  # Missing author in TODO
+    "TD003",  # Missing issue link on the line following this TODO
+    "TD005",  # Missing issue description after `TODO`
   ]
 
 [tool.ruff.per-file-ignores]
