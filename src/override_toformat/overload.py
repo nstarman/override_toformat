@@ -22,7 +22,7 @@ __all__: list[str] = []
 ##############################################################################
 
 
-# @dataclass(frozen=True)  # TODO!
+# @dataclass(frozen=True)  # TODO: make a dataclass when mypyc allows
 class ToFormatOverloader(Mapping[type, Dispatcher]):
     """Overload for ``to_format``."""
 
