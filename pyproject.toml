@@ -185,6 +185,7 @@
     "ARG001", "ARG002",
     "D105", "D107", "D203", "D213",
     "FBT003",
+    "FIX002",  # Line contains TODO
     "PD",
     "RET505", "RET506", "RET507",
     "TD002",  # Missing author in TODO
