@@ -44,7 +44,7 @@ class Dispatcher:
         def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Implements:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[Implements]  # noqa: SLF001
+        self._dispatcher: functools._SingleDispatchCallable[Implements]
         self._dispatcher = dispatcher
 
     def __call__(self, obj: object, /) -> Implements:
@@ -103,7 +103,7 @@ class FormatDispatcher:
         def dispatcher(obj: object, /, *args: Any, **kwargs: Any) -> Dispatcher:
             raise NotImplementedError  # See Mixin for handling.
 
-        self._dispatcher: functools._SingleDispatchCallable[Dispatcher]  # noqa: SLF001
+        self._dispatcher: functools._SingleDispatchCallable[Dispatcher]
         self._dispatcher = dispatcher
 
     def __call__(self, type_: type, /) -> Dispatcher:
