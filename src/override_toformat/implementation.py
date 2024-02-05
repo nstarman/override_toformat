@@ -70,6 +70,7 @@ class Implements:
         ------
         ValueError
             If the object or format is not compatible with the constraints.
+
         """
         if not self.from_constraint.validate_type(from_obj.__class__):
             msg = f"object {from_obj!r} is not compatible with from_constraint {self.from_constraint}"

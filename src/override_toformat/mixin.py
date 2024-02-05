@@ -29,6 +29,7 @@ class ToFormatOverloadMixin:
     ----------
     FMT_OVERLOADS : |ToFormatOverloader|
         A class-attribute of an instance of |ToFormatOverloader|.
+
     """
 
     FMT_OVERLOADS: ClassVar[ToFormatOverloader]
@@ -55,5 +56,6 @@ class ToFormatOverloadMixin:
         ------
         ValueError
             If format is not one of the recognized types.
+
         """
         return self.FMT_OVERLOADS(format)(self)(self, format, *args, **kwargs)

@@ -58,6 +58,7 @@ class Dispatcher:
         Returns
         -------
         `override_toformat.func.Implements`
+
         """
         return self._dispatcher(obj)
 
@@ -70,6 +71,7 @@ class Dispatcher:
             Type to register.
         impl : `override_toformat.func.Implements`, positional-only
             Implementation to register.
+
         """
         self._dispatcher.register(cls, DispatchWrapper(impl))
 
@@ -85,6 +87,7 @@ class DispatchWrapper(Generic[T]):
     ----------
     __wrapped__ : `Implements`
         The result of calling ``Dispatch``.
+
     """
 
     __wrapped__: T  # Dispatch wrapper
