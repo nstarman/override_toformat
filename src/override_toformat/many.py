@@ -33,6 +33,7 @@ class RegisterManyImplementsDecorator:
     __wrapped__ : Callable[..., Any] | None
         The assistance function which this object wraps. ``__call__`` must be
         used before this is not `None`.
+
     """
 
     decorators: tuple[RegisterImplementsDecorator, ...]
@@ -58,6 +59,7 @@ class RegisterManyImplementsDecorator:
         Returns
         -------
         RegisterManyImplementsDecorator
+
         """
         if self._is_set:
             raise ValueError

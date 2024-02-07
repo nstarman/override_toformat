@@ -76,8 +76,7 @@ class ToFormatOverloader(Mapping[type, Dispatcher]):
         *,
         from_constraint: type | TypeConstraint | None = ...,
         to_constraint: type | TypeConstraint | None = ...,
-    ) -> RegisterImplementsDecorator:
-        ...
+    ) -> RegisterImplementsDecorator: ...
 
     @overload
     def implements(
@@ -87,8 +86,7 @@ class ToFormatOverloader(Mapping[type, Dispatcher]):
         *,
         from_constraint: type | TypeConstraint | None = ...,
         to_constraint: type | TypeConstraint | None = ...,
-    ) -> RegisterManyImplementsDecorator:
-        ...
+    ) -> RegisterManyImplementsDecorator: ...
 
     def implements(
         self,

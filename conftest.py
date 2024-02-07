@@ -21,6 +21,7 @@ def pytest_configure(config: pytest.Config) -> None:
     ----------
     config : `pytest.Config`
         pytest configuration.
+
     """
     config.option.astropy_header = True
 
@@ -43,6 +44,7 @@ def _add_numpy(doctest_namespace: dict[str, Any]) -> None:
     ----------
     doctest_namespace : dict[str, Any]
         Namespace for doctests.
+
     """
     # THIRDPARTY
     import numpy as np
