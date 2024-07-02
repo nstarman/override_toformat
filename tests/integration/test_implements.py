@@ -1,4 +1,3 @@
-# THIRDPARTY
 import pytest
 from override_toformat.constraints import Invariant
 
