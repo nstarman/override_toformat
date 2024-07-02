@@ -46,7 +46,6 @@ def _add_numpy(doctest_namespace: dict[str, Any]) -> None:
         Namespace for doctests.
 
     """
-    # THIRDPARTY
     import numpy as np
 
     # add to namespace
