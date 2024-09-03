@@ -1,4 +1,5 @@
 import pytest
+
 from override_toformat.constraints import Invariant
 
 from .data import Class1, Class2, ClassA, a
